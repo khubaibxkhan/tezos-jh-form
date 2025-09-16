@@ -295,7 +295,7 @@ export default function Home() {
                 
                 {questions[currentStep].type === 'teams' && (
                   <div className="text-gray-400 text-sm mb-2 pl-2">
-                    {/* Content Team, Graphics Team, Tech Team, Media Team, Social Media Team, PR Team, Event Management Team */}
+                    (choose your team : 1.Content Team, 2.Graphics Team, 3.Tech Team, 4.Media Team, 5.Social Media Team, 6.PR Team, 7.Event Management Team )
                   </div>
                 )}
                 
