@@ -2,9 +2,31 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+interface Question {
+  id: string;
+  question: string;
+  prompt: string;
+  type: string;
+  options?: string[];
+}
+
+interface Responses {
+  [key: string]: string;
+}
+
+interface FormData {
+  fullName: string;
+  mobileNumber: string;
+  course: string;
+  enrollmentNumber: string;
+  yearSemester: string;
+  teams: string;
+  portfolio: string;
+}
+
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState<Responses>({});
   const [isTyping, setIsTyping] = useState(false);
   const [currentInput, setCurrentInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,7 +36,7 @@ export default function Home() {
 
   const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxdRsPdU2DajcJoRordXXLNDzsk3bpk-n6A9DIgU0cR1CeVqM4_RF73dulq1eOLawXY/exec";
 
-  const questions = [
+  const questions: Question[] = [
     {
       id: 'fullName',
       question: 'Full Name',
@@ -121,7 +143,7 @@ export default function Home() {
     }, 500);
   };
 
-  const submitToGoogleSheets = async (formData: any) => {
+  const submitToGoogleSheets = async (formData: Responses) => {
     setIsSubmitting(true);
     
     try {
@@ -158,9 +180,10 @@ export default function Home() {
         console.error('Submit error:', result);
         alert('Error submitting form: ' + JSON.stringify(result.error || result || 'Unknown error'));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Network/Parse error:', error);
-      alert('Network error: ' + error.message + '\n\nCheck console for details.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert('Network error: ' + errorMessage + '\n\nCheck console for details.');
     } finally {
       setIsSubmitting(false);
     }
@@ -203,7 +226,7 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="text-blue-400">
                   💡 Take this as your first step towards innovation, collaboration, and personal growth. 
-                  We can't wait to see what you'll bring to the table!
+                  We can&apos;t wait to see what you&apos;ll bring to the table!
                 </div>
                 <button 
                   onClick={resetForm}
@@ -250,16 +273,16 @@ export default function Home() {
             </div>
 
             {/* Previous Questions & Answers */}
-            {questions.slice(0, currentStep).map((q, index) => (
+            {questions.slice(0, currentStep).map((q) => (
               <div key={q.id} className="mb-4">
                 <div className="text-blue-300 mb-1">$ {q.question}</div>
                 <div className="text-white pl-2">
                   {q.type === 'teams' ? (
                     <div className="text-gray-300">
-                      Selected: {responses[q.id as keyof typeof responses]}
+                      Selected: {responses[q.id]}
                     </div>
                   ) : (
-                    `> ${responses[q.id as keyof typeof responses]}`
+                    `> ${responses[q.id]}`
                   )}
                 </div>
               </div>
@@ -272,13 +295,13 @@ export default function Home() {
                 
                 {questions[currentStep].type === 'teams' && (
                   <div className="text-gray-400 text-sm mb-2 pl-2">
-                    //Content Team //Graphics Team //Tech Team //Media Team //Social Media Team //PR Team //Event Management Team
+                    {/* Content Team, Graphics Team, Tech Team, Media Team, Social Media Team, PR Team, Event Management Team */}
                   </div>
                 )}
                 
                 {questions[currentStep].id === 'portfolio' && (
                   <div className="text-gray-400 text-sm mb-2 pl-2">
-                    (enter null if you don't have)
+                    (enter null if you don&apos;t have)
                   </div>
                 )}
                 
