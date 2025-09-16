@@ -301,7 +301,7 @@ export default function Home() {
                 
                 {questions[currentStep].id === 'portfolio' && (
                   <div className="text-gray-400 text-sm mb-2 pl-2">
-                    (enter null if you don&apos;t have)
+                    (drop a link to your portfolio , enter null if you don&apos;t have)
                   </div>
                 )}
                 
